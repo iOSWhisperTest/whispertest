@@ -1,5 +1,5 @@
 # WhisperTest: A Voice-Control-based Library for iOS UI Automation
-This repository contains the code for the paper titled ["WhisperTest: A Voice-Control-based Library for iOS UI Automation"](https://research.utwente.nl/files/508770849/moti-whispertest-2025.pdf) (published at [ACM CCS 2025](https://www.sigsac.org/ccs/CCS2025/)).
+This repository contains the code for the paper titled ["WhisperTest: A Voice-Control-based Library for iOS UI Automation"](https://research.utwente.nl/files/508770849/moti-whispertest-2025.pdf) (to appear at [ACM CCS 2025](https://www.sigsac.org/ccs/CCS2025/)).
 
 
 Built on top of [pymobiledevice3](https://github.com/doronz88/pymobiledevice3), this library leverages Apple's Voice Control accessibility feature to interact with iOS apps naturally and reliably.
@@ -7,25 +7,29 @@ Built on top of [pymobiledevice3](https://github.com/doronz88/pymobiledevice3), 
 
 ## 🌟 Features
 
-### Voice-Controlled Navigation
-- **Native iOS Voice Control**: Interact with iOS apps using the built-in Voice Control accessibility feature
-- **Natural Language Commands**: Issue commands like "Tap button", "Scroll down", "Go home"
-- **Multiple TTS Providers**: Support for Piper (offline, high-quality) and gTTS (online)
+**🗣️ Text-to-Speech + Voice Control**:
+Automates app interaction using Apple’s native Voice Control and spoken commands.
 
-### Comprehensive Data Collection
-- **Screenshots**: PNG images at each navigation step
-- **Screen Recordings**: Full video capture of app sessions (MP4)
-- **Network Traffic**: PCAP files for traffic analysis
-- **Accessibility Data**: UI and screen element properties
-- **OCR Data**: Extracted text and icons from screenshots
+**💻 Cross-platform**:
+Runs on macOS, Linux, and Windows.
 
-### App Management
-- **IPA Installation**: Install apps from local IPA files
-- **App Store Installation**: Download and install apps from URLs
-- **Automated Lifecycle**: Launch, navigate, and uninstall apps programmatically
+**🍏 Works on the latest iOS versions without requiring jailbreak**:
+Fully compatible with iOS 17 and above.
+
+**📱 Testing of third-party apps**:
+Enables automation of any iOS app without developer access or modifications.
+
+**🧩 Modular and extensible architecture**:
+Easily integrate new features or navigation strategies. 
+
+**🔍 Comprehensive Data Collection**:
+- 🖼️ Screenshots — Captured at each interaction step
+- 🎥 Screen recordings — Full session video (MP4)
+- 🌐 Network traffic — PCAP files for traffic and tracker analysis
+- ♿ Accessibility data — UI tree dumps and element metadata
+- 🔤 OCR output — Extracted on-screen text and icons (via OmniParser)
 
 ## 📋 Prerequisites
-
 
 ### iOS Device Setup
 
