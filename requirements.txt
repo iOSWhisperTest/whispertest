@@ -1,0 +1,27 @@
+# Core dependencies
+pymobiledevice3>=4.0.0
+
+# Text-to-Speech
+gTTS
+playsound=1.2.2
+
+# OCR and Image Processing
+easyocr>=1.7.0
+Pillow>=10.0.0
+numpy>=1.24.0
+
+# Text Processing
+python-Levenshtein
+nltk>=3.9.10
+
+# Image Hashing
+imagehash
+
+# Network and HTTP
+requests
+
+# Flask
+Flask
+
+# Testing
+pytest
