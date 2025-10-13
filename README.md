@@ -2,36 +2,38 @@
 This repository contains the code for the paper titled ["WhisperTest: A Voice-Control-based Library for iOS UI Automation"](https://research.utwente.nl/files/508770849/moti-whispertest-2025.pdf) (to appear at [ACM CCS 2025](https://www.sigsac.org/ccs/CCS2025/)).
 
 
-Built on top of [pymobiledevice3](https://github.com/doronz88/pymobiledevice3), this library leverages Apple's Voice Control accessibility feature to interact with iOS apps naturally and reliably.
-
+Built on top of [pymobiledevice3](https://github.com/doronz88/pymobiledevice3), the WhisperTest library leverages Apple's Voice Control accessibility feature to interact with iOS apps.
 
 ## 🌟 Features
 
 **🗣️ Text-to-Speech + Voice Control**:
-Automates app interaction using Apple’s native Voice Control and spoken commands.
+Automates app and OS interaction using Apple's native Voice Control and spoken commands.
 
 **💻 Cross-platform**:
 Runs on macOS, Linux, and Windows.
 
 **🍏 Works on the latest iOS versions without requiring jailbreak**:
-Fully compatible with iOS 17 and above.
+Compatible with iOS 17 and above. Jailbreaking is not necessary.
 
-**📱 Testing of third-party apps**:
-Enables automation of any iOS app without developer access or modifications.
+**📱 Testing of third-party apps and OS features**:
+Enables automation of any iOS app without developer access or modifications. Also enables automating iOS system apps, menus and features.
 
 **🧩 Modular and extensible architecture**:
-Easily integrate new features or navigation strategies. 
+Easily integrate new features or navigation strategies (i.e., how to interact with a given app).
 
 **🔍 Comprehensive Data Collection**:
-- 🖼️ Screenshots — Captured at each interaction step
-- 🎥 Screen recordings — Full session video (MP4)
-- 🌐 Network traffic — PCAP files for traffic and tracker analysis
-- ♿ Accessibility data — UI tree dumps and element metadata
-- 🔤 OCR output — Extracted on-screen text and icons (via OmniParser)
+- 🖼️ **Screenshots:** Captured at each interaction step
+- 🎥 **Screen recordings:** Full session video (MP4)
+- 🌐 **Network traffic:** PCAP files for traffic and tracker analysis
+- ♿ **Accessibility data:** UI tree dumps and element metadata
+- 🔤 **OCR output:** Extracted on-screen text and icons (via OmniParser)
 
 ## 📋 Prerequisites
 
 ### iOS Device Setup
+
+> [!WARNING]
+> For security reasons we strongly recommend using a test phone rather than your personal device with sensitive data, apps and settings. See the Safety and Security section of [our paper](https://research.utwente.nl/files/508770849/moti-whispertest-2025.pdf) for potential risks.
 
 1. **Enable Voice Control**:
    - Go to Settings → Accessibility → Voice Control
@@ -48,17 +50,17 @@ Easily integrate new features or navigation strategies.
    ```bash
    # Start the tunneld service (keeps running in background)
    sudo -E pymobiledevice3 remote tunneld
-   
+
    # Or use the provided helper script
    ./whisper_test/scripts/start_tunnel.sh
    ```
 
-> **Note**: The `tunneld` service must remain running for the framework to communicate with your device. Run it in a separate terminal window or as a background service.
+> **Note**: The `tunneld` service must be running for the framework to communicate with your device. Run it in a separate terminal window or as a background process.
 
-### 🔌 External Services 
+### 🔌 External Services
 
-- **Omniparser OCR Service**: 
-  WhisperTest integrates with a REST-based version of [OmniParser](https://github.com/zahra7394/OmniParser) — a FastAPI service that performs OCR and visual element detection on screenshots.  
+- **Omniparser OCR Service**:
+  WhisperTest integrates with a REST-based version of [OmniParser](https://github.com/zahra7394/OmniParser) — a FastAPI service that performs OCR and visual element detection on screenshots.
   The service can run locally or remotely and returns structured detection results and a labeled image.
 
   **Quick start:**
@@ -158,7 +160,7 @@ from whisper_test.device import WhisperTestDevice
 # Initialize device connection
 device = WhisperTestDevice()
 
-# Install an app from IPA file
+# Optinalli install an app from IPA file
 device.install_app_via_ipa("path/to/app.ipa")
 
 # Launch the app
@@ -184,7 +186,7 @@ device.close()
 ### Core Components
 
 - **`device.py`**: Main device interface and control
-- **`navigation.py`**: App navigation 
+- **`navigation.py`**: App navigation
 - **`tts.py`**: Text-to-speech controller with multi-provider support
 - **`data_collector.py`**: Automated data collection
 - **`rule_based_app_navigation.py`**: Rule-based dialog and permission handling
@@ -227,7 +229,7 @@ The `raspberry_pi/` directory contains scripts and documentation to enable USB m
 ### TTS Providers
 
 - **Piper** (Recommended): Offline, high-quality voices
-- **gTTS**: Online, requires internet
+- **gTTS**: Online, requires internet connection and may be rate-limited (use at your own risk)
 
 Configure in `config.json`:
 
@@ -329,7 +331,7 @@ We welcome contributions! Whether it's bug fixes, new features, documentation im
 
 ## 🙏 Acknowledgments
 
-- **[pymobiledevice3](https://github.com/doronz88/pymobiledevice3)** - The foundation of this library. 
+- **[pymobiledevice3](https://github.com/doronz88/pymobiledevice3)** - The foundation of this library.
 
 - **[Piper](https://github.com/rhasspy/piper)** - High-quality neural text-to-speech engine that enables natural voice commands with minimal latency.
 
