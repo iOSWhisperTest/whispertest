@@ -202,7 +202,7 @@ device.close()
 
 ```
 whispertest/
-├── examples/                    # Example scripts
+├── examples/                   # Example scripts
 │   ├── data_collection/        # Data collection
 │   ├── get_installed_apps/     # List installed apps
 │   ├── launch_app/             # App launching
@@ -213,10 +213,14 @@ whispertest/
 ├── whisper_test/               # Main library
 │   ├── test/                   # Test suite
 │   └── scripts/                # Helper scripts
+├── raspberry_pi/               # Scripts and docs for the Pi
 ├── requirements.txt
 └── README.md
 ```
 
+### USB microphone and mouse/keyboard emulation
+
+The `raspberry_pi/` directory contains scripts and documentation to enable USB microphone emulation and USB mouse and keyboard emulation by connecting a Raspberry Pi to the iOS device. This functionality is currently not integrated with the rest of the repository. See `raspberry_pi/README.md` for more details.
 
 ## 🔧 Configuration
 
