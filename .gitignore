@@ -160,3 +160,5 @@ vc_cmd_audio_files/
 whisper_test/test_etc.ipynb
 WhisperTest.png
 data_lockdown_enabled
+
+.DS_Store
