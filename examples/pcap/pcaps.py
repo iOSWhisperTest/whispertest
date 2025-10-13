@@ -1,9 +1,10 @@
-"""Example of launching an app on an iOS device."""
 import sys
-from os.path import dirname, abspath, join
-sys.path.insert(0, abspath(join(dirname(dirname(__file__)), '..')))
+from pathlib import Path
+root_dir = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(root_dir))
 
 from whisper_test.device import WhisperTestDevice
+
 
 def main():
     device = WhisperTestDevice()

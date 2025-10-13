@@ -1,5 +1,13 @@
+# insert path. Can be removed if whisper_test is installed
+import sys
+from pathlib import Path
+
+root_dir = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(root_dir))
+
 import json
 from time import sleep
+from os.path import abspath, join, dirname
 from urllib.parse import urlparse
 from datetime import datetime
 
@@ -8,10 +16,7 @@ from pymobiledevice3.lockdown import create_using_usbmux
 from pymobiledevice3.services.web_protocol.driver import WebDriver
 from pymobiledevice3.services.webinspector import SAFARI, WebinspectorService
 
-# insert path. Can be removed if whisper_test is installed
-import sys
-from os.path import dirname, abspath, join
-sys.path.insert(0, abspath(join(dirname(dirname(__file__)), '..')))
+
 
 from whisper_test.device import WhisperTestDevice
 from whisper_test.common import logger
@@ -19,6 +24,9 @@ from whisper_test.common import logger
 
 WAIT_DURATION_AFTER_VC = 3
 
+# Domains from Hanley and Durumeric, CWSM 2024.
+# Machine-Made Media: Monitoring the Mobilization of Machine-Generated
+# Articles on Misinformation and Mainstream News Websites
 RELIABLE_DOMAINS = abspath(join(dirname(__file__), 'reliable_domains.txt'))
 UNRELIABLE_DOMAINS = abspath(join(dirname(__file__), 'unreliable_domains.txt'))
 

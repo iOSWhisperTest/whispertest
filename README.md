@@ -1,5 +1,5 @@
 # WhisperTest: A Voice-Control-based Library for iOS UI Automation
-This repository contains the code for the paper titled ["WhisperTest: A Voice-Control-based Library for iOS UI Automation"](https://research.utwente.nl/files/508770849/moti-whispertest-2025.pdf) (to appear at [ACM CCS 2025](https://www.sigsac.org/ccs/CCS2025/)).
+This repository contains the code for the paper titled ["WhisperTest: A Voice-Control-based Library for iOS UI Automation"](moti-et-al-whispertest-ccs-2025-expanded.pdf) (to appear at [ACM CCS 2025](https://www.sigsac.org/ccs/CCS2025/)).
 
 
 Built on top of [pymobiledevice3](https://github.com/doronz88/pymobiledevice3), the WhisperTest library leverages Apple's Voice Control accessibility feature to interact with iOS apps.
@@ -33,7 +33,7 @@ Easily integrate new features or navigation strategies (i.e., how to interact wi
 ### iOS Device Setup
 
 > [!WARNING]
-> For security reasons we strongly recommend using a test phone rather than your personal device with sensitive data, apps and settings. See the Safety and Security section of [our paper](https://research.utwente.nl/files/508770849/moti-whispertest-2025.pdf) for potential risks.
+> For security reasons we strongly recommend using a test phone rather than your personal device with sensitive data, apps and settings. See the Safety and Security section of [our paper](moti-et-al-whispertest-ccs-2025-expanded.pdf) for potential risks.
 
 1. **Enable Voice Control**:
    - Go to Settings → Accessibility → Voice Control
