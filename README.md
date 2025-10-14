@@ -1,6 +1,8 @@
 # WhisperTest: A Voice-Control-based Library for iOS UI Automation
 This repository contains the code for the paper titled ["WhisperTest: A Voice-Control-based Library for iOS UI Automation"](moti-et-al-whispertest-ccs-2025-expanded.pdf) ([ACM CCS 2025](https://www.sigsac.org/ccs/CCS2025/)).
 
+<img width="805" height="395" alt="image" src="https://github.com/user-attachments/assets/3a6c4bde-7cee-487b-854c-540d2584e8dc" />
+
 WhisperTest uses Apple's [Voice Control](https://support.apple.com/en-us/111778) accessibility feature and [pymobiledevice3](https://github.com/doronz88/pymobiledevice3) library to interact with iOS apps and devices.
 
 ## 🌟 Features
