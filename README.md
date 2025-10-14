@@ -312,6 +312,9 @@ pytest -sv whisper_test/test/
 4. Adjust device volume
 5. Try alternative TTS provider
 
+## 🎥 Demo
+
+https://github.com/user-attachments/assets/7d0d6bf4-4f18-487a-8352-f10e818ae2e8
 
 ## 📝 Reference
 
