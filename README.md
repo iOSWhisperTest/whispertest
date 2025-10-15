@@ -85,7 +85,7 @@ Easily integrate new features or navigation strategies (i.e., how to interact wi
 - **LLM-based Navigation Service**:
   WhisperTest can be extended with local or remote Large Language Models (LLMs) for navigation decisions. This is done, for example, by making use of the companion package [`wtmi`](https://github.com/iOSWhisperTest/whispertest-model-interface) (WhisperTest Model Interface), which:
 
-  - receives **accessibility (A11Y) data**, **OCR detections**, or **screenshots** from the iOS app under test.
+  - Receives **accessibility (A11Y) data**, **OCR detections**, or **screenshots** from the iOS app under test.
   - Formats this data into structured prompts for an LLM (through a REST API endpoint).
   - Optionally performs a **consent-dialog classification** pass (accept/reject).
   - Returns a single **next action** (e.g. _Tap_, _Type_) that WhisperTest can execute on the device.
@@ -102,12 +102,13 @@ Easily integrate new features or navigation strategies (i.e., how to interact wi
   ```
 
   2. Ensure a REST API is running
-     The package expects an LLM REST server with endpoints like:
+  
+    The package expects an LLM REST server with endpoints like:
 
-  - `http://<server-ip>:5000/query_ollama`
-  - `http://<server-ip>:5000/query_transformers'
-(These can be changed in `wtmi/settings/config.dict.md`).
-    An exemple Flask-based REST API to run local LLMs or MLLMs can be found [here](https://github.com/iOSWhisperTest/llm-rest-api).
+    - `http://<server-ip>:5000/query_ollama`
+    - `http://<server-ip>:5000/query_transformers`
+  
+    An example Flask-based REST API to run local LLMs or MLLMs can be found [here](https://github.com/iOSWhisperTest/llm-rest-api).
 
 ## 🚀 Installation
 
