@@ -43,7 +43,7 @@ Easily integrate new features or navigation strategies (i.e., how to interact wi
    - Go to Settings → Accessibility → Voice Control
    - Toggle on Voice Control
 
-2. **Enable Developer Mode** (Perform developer operations (Requires enable of Developer-Mode)):
+2. **Enable Developer Mode** (Required for most library functions):
 
    - Settings → Privacy & Security → Developer Mode
 
