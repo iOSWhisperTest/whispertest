@@ -1,4 +1,5 @@
 # WhisperTest: A Voice-Control-based Library for iOS UI Automation
+
 This repository contains the code for the paper titled ["WhisperTest: A Voice-Control-based Library for iOS UI Automation"](moti-et-al-whispertest-ccs-2025-expanded.pdf) ([ACM CCS 2025](https://www.sigsac.org/ccs/CCS2025/)).
 
 <img width="805" height="395" alt="image" src="https://github.com/user-attachments/assets/3a6c4bde-7cee-487b-854c-540d2584e8dc" />
@@ -23,6 +24,7 @@ Enables automation of any iOS app without developer access or modifications. Als
 Easily integrate new features or navigation strategies (i.e., how to interact with a given app).
 
 **🔍 Comprehensive Data Collection**:
+
 - 🖼️ **Screenshots:** Captured at each interaction step
 - 🎥 **Screen recordings:** Full session video (MP4)
 - 🌐 **Network traffic:** PCAP files for traffic and tracker analysis
@@ -37,17 +39,21 @@ Easily integrate new features or navigation strategies (i.e., how to interact wi
 > For security reasons we strongly recommend using a test phone rather than your personal device with sensitive data, apps and settings. See the Safety and Security section of [our paper](moti-et-al-whispertest-ccs-2025-expanded.pdf) for potential risks.
 
 1. **Enable Voice Control**:
+
    - Go to Settings → Accessibility → Voice Control
    - Toggle on Voice Control
 
 2. **Enable Developer Mode** (Perform developer operations (Requires enable of Developer-Mode)):
+
    - Settings → Privacy & Security → Developer Mode
 
 3. **Trust Computer**:
+
    - Connect device via USB
    - Tap "Trust" when prompted on device
 
 4. **Start Remote Service Tunnel** (iOS 17.4+):
+
    ```bash
    # Start the tunneld service (keeps running in background)
    sudo -E pymobiledevice3 remote tunneld
@@ -65,14 +71,43 @@ Easily integrate new features or navigation strategies (i.e., how to interact wi
   The service can run locally or remotely and returns structured detection results and a labeled image.
 
   **Quick start:**
+
   ```bash
   git clone https://github.com/zahra7394/OmniParser.git
   cd OmniParser
   pip install -r requirements.txt
   python app.py
   ```
+
   The API will start at http://localhost:5000/process.
   WhisperTest connects automatically if omniparser_api_url in config.json is set to this endpoint.
+
+- **LLM-based Navigation Service**:
+  WhisperTest can be extended with local or remote Large Language Models (LLMs) for navigation decisions. This is done, for example, by making use of the companion package [`wtmi`](https://github.com/iOSWhisperTest/whispertest-model-interface) (WhisperTest Model Interface), which:
+
+  - receives **accessibility (A11Y) data**, **OCR detections**, or **screenshots** from the iOS app under test.
+  - Formats this data into structured prompts for an LLM (through a REST API endpoint).
+  - Optionally performs a **consent-dialog classification** pass (accept/reject).
+  - Returns a single **next action** (e.g. _Tap_, _Type_) that WhisperTest can execute on the device.
+
+  **Quick start:**
+
+  1. Clone and install
+
+  ```bash
+   git clone https://github.com/iOSWhisperTest/whispertest-model-interface.git
+   cd whispertest-model-interface
+   pip install -r requirements.txt
+   pip install -e .
+  ```
+
+  2. Ensure a REST API is running
+     The package expects an LLM REST server with endpoints like:
+
+  - `http://<server-ip>:5000/query_ollama`
+  - `http://<server-ip>:5000/query_transformers'
+(These can be changed in `wtmi/settings/config.dict.md`).
+    An exemple Flask-based REST API to run local LLMs or MLLMs can be found [here](https://github.com/iOSWhisperTest/llm-rest-api).
 
 ## 🚀 Installation
 
@@ -106,6 +141,7 @@ sudo mv piper /usr/local/bin/
 ```
 
 **Download Voice Models**:
+
 1. Visit [Piper Voices](https://github.com/rhasspy/piper/blob/master/VOICES.md)
 2. Download desired models (e.g., `en_US-amy-medium`)
 3. Place `.onnx` and `.onnx.json` files in the `piper/` directory
@@ -143,6 +179,7 @@ Create a `config.json` file in the root directory to customize settings:
 ```
 
 **Configuration Options**:
+
 - `media_path`: Directory to save screenshots, videos, and data
 - `tts_provider`: TTS engine (`piper_en_US-amy-medium` or `gTTS`)
 - `piper_root_dir`: Directory containing Piper voice models
@@ -180,7 +217,6 @@ device.say("Scroll down")
 device.uninstall_app(app_bundle_id)
 device.close()
 ```
-
 
 ## 🏗️ Architecture
 
@@ -242,12 +278,14 @@ Configure in `config.json`:
 ```
 
 ### Consent Mode
+
 Control how the library handles permission dialogs:
 
 - `"accept"`: Accept all permissions (cookies, tracking, location, etc.)
 - `"reject"`: Reject all permissions
 
 ### LLM Configuration
+
 TBD
 
 ## 📊 Data Collection
@@ -289,6 +327,7 @@ pytest -sv whisper_test/test/
 **Problem**: `Cannot connect to device` or `No devices found`
 
 **Solutions**:
+
 1. Check physical connection:
    ```bash
    pymobiledevice3 usbmux list
@@ -302,10 +341,10 @@ pytest -sv whisper_test/test/
    - Look for "Trust This Computer?" prompt on device
    - Enter device passcode
 
-
 **Problem**: Voice commands not working or being ignored
 
 **Solutions**:
+
 1. Verify Voice Control is active
 2. Test audio playback
 3. Check TTS configuration
@@ -345,15 +384,10 @@ We welcome contributions! Whether it's bug fixes, new features, documentation im
 
 For any questions, suggestions, or issues regarding this project or our paper, please contact:
 
-| **Author**         | **Email**                     |
-|--------------------|-------------------------------|
-| [Zahra Moti](https://www.ru.nl/en/people/moti-jeshveghani-z)      | zahra.moti@ru.nl   |
-| [Tom Janssen-Groesbeek](https://tomjanssengroesbeek.nl/)    | tom.janssen-groesbeek@ru.nl   |
-| Steven Monteiro   | s.c.monteiro@student.utwente.nl   |
-| [Gunes Acar](https://gunesacar.net/)     | g.acar@cs.ru.nl   |
-| [Andrea Continella](https://conand.me/) | a.continella@utwente.nl |
-
-
-
-
-
+| **Author**                                                   | **Email**                       |
+| ------------------------------------------------------------ | ------------------------------- |
+| [Zahra Moti](https://www.ru.nl/en/people/moti-jeshveghani-z) | zahra.moti@ru.nl                |
+| [Tom Janssen-Groesbeek](https://tomjanssengroesbeek.nl/)     | tom.janssen-groesbeek@ru.nl     |
+| Steven Monteiro                                              | s.c.monteiro@student.utwente.nl |
+| [Gunes Acar](https://gunesacar.net/)                         | g.acar@cs.ru.nl                 |
+| [Andrea Continella](https://conand.me/)                      | a.continella@utwente.nl         |
