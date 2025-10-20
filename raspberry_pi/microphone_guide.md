@@ -13,9 +13,10 @@ The main advantages of this method are:
 ## Hardware requirements
 
 * iOS device with a Lightning port. USB-C is untested.
-* Apple Lightning to USB 3 Camera Adapter / A1619 / MK0W2AM/A / MK0W2ZM/A.
-  This adapter might seem redundant but is in fact required.
-  * We recommend the original adapter from Apple to avoid compatibility issues.
+* Male Lightning to female USB-A adapter. This adapter might seem redundant but is in fact required.
+  * Available from Apple under the following names:
+    Apple Lightning to USB 3 Camera Adapter | A1619 | MK0W2AM/A | MK0W2ZM/A.
+  * We have also successfully replicated the setup with a (cheaper) third-party adapter.
 * Raspberry Pi 4, Raspberry Pi 5, or any model of Raspberry Pi Zero. Raspberry Pi 1/2/3 *do not work*.
   * Specifically, the device must support USB OTG or Device Mode.
     The majority of desktop and laptop USB ports do not, but other embedded boards might work.
@@ -29,20 +30,22 @@ The main advantages of this method are:
 > [!IMPORTANT]
 > Read this section carefully, the cables can be somewhat confusing.
 
-1. Use the male Lightning connector of the A1619 adapter to connect it your iOS device.
+1. Use the male Lightning connector of the Lightning to USB-A adapter to connect it your iOS device.
    If you are plugging it in for the first time, you may be prompted for a firmware update.
 <!-->
 2. If your Pi is a full-size model:
    1. Connect the power port of the USB hub to a power source as you normally would.
-   2. Connect the USB-A port of the A1619 adapter to the host side of the USB hub.
+   2. Connect the USB-A port of the Lightning to USB-A adapter to the host side of the USB hub.
    3. Connect the USB-C power port of the Pi to one of the device ports on the USB hub.
 <!-->
 2. If your Pi is a Zero model:
    1. Connect the USB-Micro-B power port to a power source as you normally would.
-   2. Connect the USB-Micro-B OTG port to the USB-A port of the A1619 adapter.
+   2. Connect the USB-Micro-B OTG port to the USB-A port of the Lightning to USB-A adapter.
 <!-->
-3. Optional: Connect the female Lightning port of the A1619 adapter to a power source to charge the iOS device.
+3. Optional: Connect the female Lightning port of the Lightning to USB-A adapter to a power source to charge the iOS device.
    The iOS device cannot be charged through the USB-A port even when connected to a powered USB hub.
+
+![Photo of the hardware setup](microphone_setup.png)
 
 ### Software setup
 
@@ -76,4 +79,5 @@ you can use the Voice Memos app on the iOS device to record from the microphone 
 ```
 aplay -D plughw:CARD=UAC2Gadget,DEV=0 sample.wav
 ```
-If you get white noise, make sure that the file you're trying to play is actually `.wav`.
+If you hear white noise, make sure that the file you are trying to play contains uncompressed audio.
+We recommend FFmpeg to convert audio files to the appropriate format.

@@ -1,9 +1,11 @@
 # Raspberry Pi Scripts and Documentation
 
 The Raspberry Pi functionality currently consists of two separate control methods:
-USB microphone emulation, and USB mouse and keyboard emulation.
+USB microphone emulation, as described in section 3.1.5 of the paper;
+and USB mouse and keyboard emulation, as described in section 3.1.6.
 Each method allows access to the entire iOS device,
 including screens that might normally be considered privileged such as Settings or the App Store.
+However, both methods should be considered experimental.
 
 ## USB Microphone Emulation
 
@@ -36,3 +38,11 @@ This integration is however currently not part of the repository.
 Documentation for the HTTP API is available in `mouse_keyboard_api.md`.
 Note that `mouse_keyboard.py` does not have a main function due to being a Flask application.
 See the Flask documentation for details.
+
+### Limitations
+
+* The position of the mouse cursor may be inaccurate due to iOS devices making use of
+  a complex nonlinear scale to convert mouse inputs to onscreen cursor movements.
+  This scale further differs per iOS version.
+* The keyboard API endpoints currently do not account for
+  keyboard layouts other than United States layout (QWERTY) or alphabets other than Latin.

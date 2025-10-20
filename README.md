@@ -260,7 +260,11 @@ whispertest/
 
 ### USB microphone and mouse/keyboard emulation
 
-The `raspberry_pi/` directory contains scripts and documentation to enable USB microphone emulation and USB mouse and keyboard emulation by connecting a Raspberry Pi to the iOS device. This functionality is currently not integrated with the rest of the repository. See `raspberry_pi/README.md` for more details.
+The `raspberry_pi/` directory contains scripts and documentation to enable USB microphone emulation
+and USB mouse and keyboard emulation by connecting a Raspberry Pi to the iOS device,
+as described in sections 3.1.5 and 3.1.6 of our paper.
+This functionality is experimental and is currently not integrated with the rest of the repository.
+See `raspberry_pi/README.md` for more details.
 
 ## 🔧 Configuration
 
