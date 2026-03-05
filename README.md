@@ -230,7 +230,7 @@ The package expects an LLM REST server with endpoints like `http://<server-ip>:5
 
 ### Configure the Framework
 
-Copy the example configuration and customize as needed:
+Create a `config.json` file in the root directory to customize settings:
 
 ```json
 {
@@ -296,12 +296,6 @@ device.install_app_via_ipa("path/to/app.ipa")
 device.launch_app("com.example.myapp")
 device.uninstall_app("com.example.myapp")
 
-# Clean up
-device.uninstall_app(app_bundle_id)
-# Clean up
-device.uninstall_app(app_bundle_id)
-# Clean up
-device.uninstall_app(app_bundle_id)
 device.close()
 ```
 
