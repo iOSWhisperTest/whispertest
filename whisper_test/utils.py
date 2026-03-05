@@ -52,6 +52,7 @@ except ImportError:
     # fallback for older versions of pymobiledevice3
     from pymobiledevice3.tunneld import async_get_tunneld_devices
 
+from pymobiledevice3.remote.remote_service_discovery import RemoteServiceDiscoveryService
 from pymobiledevice3.services.afc import AfcService
 from pymobiledevice3.services.dvt.dvt_secure_socket_proxy import DvtSecureSocketProxyService
 from pymobiledevice3.services.dvt.instruments.screenshot import Screenshot
@@ -73,21 +74,45 @@ def take_screenshot_dvt(screenshot_path, dvt):
 async def get_active_tunnel_conn():
     """Return the active tunnel to the connected iOS device.
 
-    Requires an rsd connection set up with:
-    sudo -E pymobiledevice3 remote tunneld
+    Tries two approaches in order:
+    1. Connect via the tunneld daemon (sudo pymobiledevice3 remote tunneld)
+    2. Connect via direct RSD address/port from environment variables or config
+       (sudo pymobiledevice3 lockdown start-tunnel)
     """
+    # Approach 1: try the tunneld daemon
     try:
         rsds = await async_get_tunneld_devices()
+        if len(rsds) == 1:
+            return rsds[0]
+        elif len(rsds) > 1:
+            raise MultipleDevicesConnectedError("Does not support multiple devices")
     except Exception as tce:
-        logger.error("❌ Cannot find an active connection.\
-                     Please start a tunnel first: %s", tce)
-        return None
+        logger.info("tunneld not available, trying direct RSD connection: %s", tce)
 
-    if len(rsds) == 0:
-        raise NoDeviceConnectedError("Device not connected or tunnel not established.")
-    elif len(rsds) > 1:
-        raise MultipleDevicesConnectedError("Does not support multiple devices")
-    return rsds[0]
+    # Approach 2: try direct RSD connection from env vars or config
+    rsd_address = os.environ.get('RSD_ADDRESS')
+    rsd_port = os.environ.get('RSD_PORT')
+
+    if not rsd_address or not rsd_port:
+        from whisper_test.common import _config
+        rsd_address = rsd_address or _config.get('rsd_address')
+        rsd_port = rsd_port or _config.get('rsd_port')
+
+    if rsd_address and rsd_port:
+        try:
+            rsd = RemoteServiceDiscoveryService((rsd_address, int(rsd_port)))
+            await rsd.connect()
+            logger.info("Connected via direct RSD: %s:%s", rsd_address, rsd_port)
+            return rsd
+        except Exception as e:
+            logger.error("❌ Failed to connect via RSD %s:%s: %s", rsd_address, rsd_port, e)
+
+    raise NoDeviceConnectedError(
+        "No tunnel connection found. Either:\n"
+        "  1. Run: sudo pymobiledevice3 remote tunneld\n"
+        "  2. Run: sudo pymobiledevice3 lockdown start-tunnel\n"
+        "     and set RSD_ADDRESS/RSD_PORT env vars or rsd_address/rsd_port in config.json"
+    )
 
 def is_text_in_syslog(texts, syslog, timeout=3):
     """Check if any of the specified texts are present in the syslog."""

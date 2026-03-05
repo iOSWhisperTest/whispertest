@@ -46,7 +46,7 @@ _config = load_config()
 ########### TTS root dir to store the audio files ###########
 TTS_AUDIO_ROOT_DIR = _config.get('tts_audio_root_dir', join(dirname(dirname(__file__)), 'vc_cmd_audio_files'))
 ########### Other TTS config ###########
-DEFAULT_TTS_PROVIDER = TTS_PROVIDER_PIPER_EN_US_AMY_MEDIUM
+DEFAULT_TTS_PROVIDER = _config.get('tts_provider', TTS_PROVIDER_PIPER_EN_US_AMY_MEDIUM)
 MAX_N_VOICE_CMD_TRIES = 3  # max number of tries to send a voice command
 
 ########### LLM config ###########
@@ -125,6 +125,9 @@ INSTALLATION_LOG_SEARCH_STRINGS = [
 ]
 
 logger = setup_logger()
+
+########### Cookie dialog keywords file ###########
+KEYWORDS_FILE_PATH = _config.get('keywords_file_path', join(dirname(dirname(__file__)), 'cookie_keywords.txt'))
 
 ########### Rule based action mappings to interact with native dialogs ###########
 RULE_BASED_ACTION_MAPPINGS = {
