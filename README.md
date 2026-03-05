@@ -31,6 +31,10 @@ Easily integrate new features or navigation strategies (i.e., how to interact wi
 - ♿ **Accessibility data:** UI tree dumps and element metadata
 - 🔤 **OCR output:** Extracted on-screen text and icons (via OmniParser)
 
+## 🎥 Demo
+
+https://github.com/user-attachments/assets/7d0d6bf4-4f18-487a-8352-f10e818ae2e8
+
 ## 📋 Prerequisites
 
 ### iOS Device Setup
@@ -52,79 +56,23 @@ Easily integrate new features or navigation strategies (i.e., how to interact wi
    - Connect device via USB
    - Tap "Trust" when prompted on device
 
-4. **Start Remote Service Tunnel** (iOS 17.4+):
-
-   ```bash
-   # Start the tunneld service (keeps running in background)
-   sudo -E pymobiledevice3 remote tunneld
-
-   # Or use the provided helper script
-   ./whisper_test/scripts/start_tunnel.sh
-   ```
-
-> **Note**: The `tunneld` service must be running for the framework to communicate with your device. Run it in a separate terminal window or as a background process.
-
-### 🔌 External Services
-
-- **Omniparser OCR Service**:
-  WhisperTest integrates with a REST-based version of [OmniParser](https://github.com/zahra7394/OmniParser) — a FastAPI service that performs OCR and visual element detection on screenshots.
-  The service can run locally or remotely and returns structured detection results and a labeled image.
-
-  **Quick start:**
-
-  ```bash
-  git clone https://github.com/zahra7394/OmniParser.git
-  cd OmniParser
-  pip install -r requirements.txt
-  python app.py
-  ```
-
-  The API will start at http://localhost:5000/process.
-  WhisperTest connects automatically if omniparser_api_url in config.json is set to this endpoint.
-
-- **LLM-based Navigation Service**:
-  WhisperTest can be extended with local or remote Large Language Models (LLMs) for navigation decisions. This is done, for example, by making use of the companion package [`wtmi`](https://github.com/iOSWhisperTest/whispertest-model-interface) (WhisperTest Model Interface), which:
-
-  - Receives **accessibility (A11Y) data**, **OCR detections**, or **screenshots** from the iOS app under test.
-  - Formats this data into structured prompts for an LLM (through a REST API endpoint).
-  - Optionally performs a **consent-dialog classification** pass (accept/reject).
-  - Returns a single **next action** (e.g. _Tap_, _Type_) that WhisperTest can execute on the device.
-
-  **Quick start:**
-
-  1. Clone and install
-
-  ```bash
-   git clone https://github.com/iOSWhisperTest/whispertest-model-interface.git
-   cd whispertest-model-interface
-   pip install -r requirements.txt
-   pip install -e .
-  ```
-
-  2. Ensure a REST API is running
-  
-    The package expects an LLM REST server with endpoints like:
-
-    - `http://<server-ip>:5000/query_ollama`
-    - `http://<server-ip>:5000/query_transformers`
-  
-    An example Flask-based REST API to run local LLMs or MLLMs can be found [here](https://github.com/iOSWhisperTest/llm-rest-api).
-
 ## 🚀 Installation
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/whispertest.git
+git clone https://github.com/iOSWhisperTest/whispertest.git
 cd whispertest
 ```
 
 ### 2. Install Python Dependencies
 
+> **Requires Python 3.10 or higher.** pymobiledevice3 and several other dependencies no longer support Python 3.9.
+
 ```bash
 # Create a virtual environment (recommended)
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+python3.13 -m venv venv          # or python3.12, python3.11, python3.10
+source venv/bin/activate          # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -134,26 +82,60 @@ pip install -r requirements.txt
 
 #### Piper TTS (Recommended for better voice quality)
 
+WhisperTest uses [Piper](https://github.com/rhasspy/piper) for local text-to-speech. The default voice model is `en_US-amy-medium`. You can install Piper via pip or as a standalone binary.
+
+**Option A: Install via pip**
+
 ```bash
-# Download from releases: https://github.com/rhasspy/piper/releases
-wget https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_amd64.tar.gz
-tar -xvf piper_amd64.tar.gz
-sudo mv piper /usr/local/bin/
+pip install piper-tts
 ```
 
-**Download Voice Models**:
+This installs the `piper` command into your virtual environment. Verify with `piper --version`.
 
-1. Visit [Piper Voices](https://github.com/rhasspy/piper/blob/master/VOICES.md)
-2. Download desired models (e.g., `en_US-amy-medium`)
-3. Place `.onnx` and `.onnx.json` files in the `piper/` directory
+**Option B: Install from binary release**
+
+Download the correct binary for your platform from [Piper releases](https://github.com/rhasspy/piper/releases/tag/2023.11.14-2) and place it in `~/piper/`:
+
+```bash
+mkdir -p ~/piper
+
+# macOS (Apple Silicon / Intel — use the aarch64 or amd64 build respectively)
+# Linux — use the amd64 or armv7 build
+# Extract the downloaded archive and move the piper binary into ~/piper/
+```
+
+**Download a voice model:**
+
+Each model requires an `.onnx` file and its `.onnx.json` config. The default model is `en_US-amy-medium`:
+
+```bash
+# Download the default model into ~/piper/
+cd ~/piper
+curl -OL "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx"
+curl -OL "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/amy/medium/en_US-amy-medium.onnx.json"
+```
+
+Browse all available voices at [Piper Voices](https://github.com/rhasspy/piper/blob/master/VOICES.md) or on [Hugging Face](https://huggingface.co/rhasspy/piper-voices/tree/v1.0.0).
+
+> **Tip**: You can change the model directory by setting `piper_root_dir` in `config.json`. The default is `~/piper/`.
 
 #### NLTK Data
 
 ```bash
-python -m nltk.downloader punkt stopwords wordnet
+python -m nltk.downloader punkt stopwords wordnet punkt_tab
 ```
 
-### 4. Verify Installation
+### 4. macOS Audio Playback (macOS only)
+
+The `playsound` library requires PyObjC to play audio on macOS:
+
+```bash
+pip install pyobjc-framework-Cocoa
+```
+
+> **Note**: This is only needed on macOS. Linux users can skip this step.
+
+### 5. Verify Installation
 
 ```bash
 # Check if pymobiledevice3 can see your device
@@ -162,32 +144,88 @@ pymobiledevice3 usbmux list
 # Should show your connected iOS device
 ```
 
-### 5. Configure the Framework
+## 🔗 Device Connection Setup
 
-Create a `config.json` file in the root directory to customize settings:
+After installing, connect pymobiledevice3 to your iOS device. The steps depend on your iOS version.
+
+### Mount Developer Disk Image (iOS < 17.0)
+
+For iOS 14, 15, and 16 devices, developer features (screenshots, accessibility audit, process management) require mounting the DeveloperDiskImage. No tunnel is needed.
+
+```bash
+pymobiledevice3 mounter auto-mount
+```
+
+> **Note**: This step is not needed for iOS 17.0+, where developer services are accessed through a tunnel instead.
+
+### Start Remote Service Tunnel (iOS 17.0+)
+
+Starting at iOS 17.0, Apple requires a tunnel for developer services. The `tunneld` daemon automatically detects connected devices and uses the best available connection method.
+
+```bash
+# Start the tunneld service (keeps running in background)
+sudo -E pymobiledevice3 remote tunneld
+
+# Or use the provided helper script
+./whisper_test/scripts/start_tunnel.sh
+```
+**Alternative: `lockdown start-tunnel`** (iOS 17.4+)
+
+If `remote tunneld` is unavailable (e.g. dependency issues on older Python), you can use the lockdown-based tunnel instead:
+
+```bash
+sudo pymobiledevice3 lockdown start-tunnel
+```
+
+This prints an RSD address and port. Pass them to the framework via environment variables or `config.json`:
+
+```bash
+# Environment variables (update address/port from the command output)
+export RSD_ADDRESS=""
+export RSD_PORT=""
+```
+
+Or set `rsd_address` and `rsd_port` in `config.json`. The framework tries `tunneld` first, then falls back to a direct RSD connection.
+
+> **Note**: The `tunneld` service must be running for the framework to communicate with iOS 17+ devices. Run it in a separate terminal window or as a background process. For iOS < 17.0, the framework communicates directly via USB (lockdown) and no tunnel is needed.
+
+## ⚙️ Configuration
+
+### Configure the Framework
+
+Copy the example configuration and customize as needed. All keys are optional -- only override what you want to change:
+
+```bash
+cp config.json.example config.json
+```
+
+Example with commonly changed settings:
 
 ```json
 {
-  "media_path": "media_output",
-  "tts_provider": "piper_en_US-amy-medium",
-  "piper_root_dir": "piper",
+  "piper_root_dir": "~/piper",
   "consent_mode": "accept",
-  "timeout_app_navigation": 200,
-  "timeout_app_installation": 120,
-  "omniparser_api_url": "api_url",
-  "llm_api_url": "api_url"
+  "omniparser_api_url": "http://0.0.0.0:5003/process"
 }
 ```
 
-**Configuration Options**:
+**All Configuration Options** (see `config.json.example` for the full template):
 
-- `media_path`: Directory to save screenshots, videos, and data
-- `tts_provider`: TTS engine (`piper_en_US-amy-medium` or `gTTS`)
-- `piper_root_dir`: Directory containing Piper voice models
-- `consent_mode`: How to handle dialogs (`accept` or `reject`)
-- `timeout_app_navigation`: Maximum time (seconds) for app navigation
-- `omniparser_api_url`: URL for OmniParser OCR service (optional)
-- `llm_api_url`: URL for LLM-based navigation service (optional)
+| Key | Default | Description |
+|---|---|---|
+| `media_path` | `"media_output"` | Directory for screenshots, videos, and collected data |
+| `tts_provider` | `"piper_en_US-amy-medium"` | TTS engine to use (see available [Piper models](#piper-tts-recommended-for-better-voice-quality) or `"gTTS"`) |
+| `tts_audio_root_dir` | `"vc_cmd_audio_files"` | Directory for cached TTS audio files |
+| `piper_root_dir` | `"~/piper"` | Directory containing the Piper binary and voice models |
+| `consent_mode` | `"accept"` | How to handle permission/cookie dialogs (`"accept"` or `"reject"`) |
+| `model_name` | `"qwen2.5:14b"` | LLM model name for navigation decisions (used by [wtmi](https://github.com/iOSWhisperTest/whispertest-model-interface)) |
+| `timeout_app_navigation` | `200` | Maximum time in seconds for navigating a single app |
+| `timeout_app_installation` | `120` | Maximum time in seconds for installing an app |
+| `omniparser_api_url` | `"http://0.0.0.0:5003/process"` | URL for the OmniParser OCR service |
+| `processed_apps_path` | `"processed_appIDs.txt"` | File tracking successfully processed apps |
+| `failed_apps_path` | `"failed_appIDs.txt"` | File tracking failed apps |
+| `rsd_address` | `""` | RSD tunnel address (from `lockdown start-tunnel` output, used when `tunneld` is unavailable) |
+| `rsd_port` | `""` | RSD tunnel port (from `lockdown start-tunnel` output) |
 
 ## 📖 Usage
 
@@ -196,24 +234,31 @@ Create a `config.json` file in the root directory to customize settings:
 ```python
 from whisper_test.device import WhisperTestDevice
 
-# Initialize device connection
+# Connect to device
 device = WhisperTestDevice()
+print(f"Connected to {device.device_name} (iOS {device.product_version})")
 
-# Optinalli install an app from IPA file
+# Take a screenshot
+device.take_screenshot("screenshot.png")
+
+# Read screen via accessibility
+a11y_data = device.get_screen_content_by_a11y(max_items=5)
+for item in a11y_data:
+    print(item)
+
+# Issue voice commands via TTS (Voice Control must be ON)
+device.tts.say("Open Safari", verify=False)   # play without syslog check
+device.tts.say("Go Home")                      # play and verify via syslog
+
+# Install, launch, and clean up an app
 device.install_app_via_ipa("path/to/app.ipa")
+device.launch_app("com.example.myapp")
+device.uninstall_app("com.example.myapp")
 
-# Launch the app
-app_bundle_id = "com.example.myapp"
-device.launch_app(app_bundle_id)
-
-# Take a screenshot and get screen content
-screenshot, _ = device.take_screenshots(app_bundle_id)
-a11y_data = device.get_screen_content_by_a11y()
-
-# Issue voice commands
-device.say("Tap Continue")
-device.say("Scroll down")
-
+# Clean up
+device.uninstall_app(app_bundle_id)
+# Clean up
+device.uninstall_app(app_bundle_id)
 # Clean up
 device.uninstall_app(app_bundle_id)
 device.close()
@@ -266,32 +311,41 @@ as described in sections 3.1.5 and 3.1.6 of our paper.
 This functionality is experimental and is currently not integrated with the rest of the repository.
 See `raspberry_pi/README.md` for more details.
 
-## 🔧 Configuration
+## 🔌 Integrations (Optional)
 
-### TTS Providers
+WhisperTest can be extended with external services for OCR and LLM-based navigation. These are **not required** for the core functionality (screenshots, accessibility, voice commands).
 
-- **Piper** (Recommended): Offline, high-quality voices
-- **gTTS**: Online, requires internet connection and may be rate-limited (use at your own risk)
+### OmniParser OCR Service
 
-Configure in `config.json`:
+WhisperTest integrates with a REST-based version of [OmniParser](https://github.com/zahra7394/OmniParser) — a FastAPI service that performs OCR and visual element detection on screenshots. The service can run locally or remotely and returns structured detection results and a labeled image.
 
-```json
-{
-  "tts_provider": "piper_en_US-amy-medium",
-  "piper_root_dir": "piper"
-}
+```bash
+git clone https://github.com/zahra7394/OmniParser.git
+cd OmniParser
+pip install -r requirements.txt
+python app.py
 ```
 
-### Consent Mode
+The API will start at http://localhost:5003/process.
+Set `omniparser_api_url` in `config.json` to connect WhisperTest to this endpoint.
 
-Control how the library handles permission dialogs:
+### LLM-based Navigation Service
 
-- `"accept"`: Accept all permissions (cookies, tracking, location, etc.)
-- `"reject"`: Reject all permissions
+WhisperTest can use local or remote Large Language Models (LLMs) for navigation decisions via the companion package [`wtmi`](https://github.com/iOSWhisperTest/whispertest-model-interface) (WhisperTest Model Interface), which:
 
-### LLM Configuration
+- Receives **accessibility (A11Y) data**, **OCR detections**, or **screenshots** from the iOS app under test.
+- Formats this data into structured prompts for an LLM (through a REST API endpoint).
+- Optionally performs a **consent-dialog classification** pass (accept/reject).
+- Returns a single **next action** (e.g. _Tap_, _Type_) that WhisperTest can execute on the device.
 
-TBD
+```bash
+git clone https://github.com/iOSWhisperTest/whispertest-model-interface.git
+cd whispertest-model-interface
+pip install -r requirements.txt
+pip install -e .
+```
+
+The package expects an LLM REST server with endpoints like `http://<server-ip>:5000/query_ollama` or `http://<server-ip>:5000/query_transformers`. An example Flask-based REST API can be found [here](https://github.com/iOSWhisperTest/llm-rest-api).
 
 ## 📊 Data Collection
 
@@ -346,6 +400,24 @@ pytest -sv whisper_test/test/
    - Look for "Trust This Computer?" prompt on device
    - Enter device passcode
 
+**Problem**: `No module named 'AppKit'` when playing audio (macOS)
+
+**Solution**: Install PyObjC:
+```bash
+pip install pyobjc-framework-Cocoa
+```
+
+**Problem**: Accessibility scan hangs or `move_focus_next` blocks indefinitely
+
+**Solution**: Ensure you are using **pymobiledevice3 4.16.x** (not 7.x). Version 7.x introduced breaking behavior changes in the accessibility service. Check with:
+```bash
+pip show pymobiledevice3
+```
+If needed, downgrade:
+```bash
+pip install pymobiledevice3==4.16.3
+```
+
 **Problem**: Voice commands not working or being ignored
 
 **Solutions**:
@@ -355,10 +427,6 @@ pytest -sv whisper_test/test/
 3. Check TTS configuration
 4. Adjust device volume
 5. Try alternative TTS provider
-
-## 🎥 Demo
-
-https://github.com/user-attachments/assets/7d0d6bf4-4f18-487a-8352-f10e818ae2e8
 
 ## 📝 Reference
 
