@@ -189,27 +189,68 @@ Or set `rsd_address` and `rsd_port` in `config.json`. The framework tries `tunne
 
 > **Note**: The `tunneld` service must be running for the framework to communicate with iOS 17+ devices. Run it in a separate terminal window or as a background process. For iOS < 17.0, the framework communicates directly via USB (lockdown) and no tunnel is needed.
 
+## 🔌 External Services
+
+WhisperTest can be extended with external services for OCR and LLM-based navigation. These are **not required** for the core functionality (screenshots, accessibility, voice commands).
+
+### OmniParser OCR Service (grid method)
+
+WhisperTest integrates with a REST-based version of [OmniParser](https://github.com/zahra7394/OmniParser) — a FastAPI service that performs OCR and visual element detection on screenshots. The service can run locally or remotely and returns structured detection results and a labeled image.
+
+```bash
+git clone https://github.com/zahra7394/OmniParser.git
+cd OmniParser
+pip install -r requirements.txt
+python app.py
+```
+
+The API will start at http://localhost:5003/process.
+Set `omniparser_api_url` in `config.json` to connect WhisperTest to this endpoint.
+
+### LLM-based Navigation Service
+
+WhisperTest can use local or remote Large Language Models (LLMs) for navigation decisions via the companion package [`wtmi`](https://github.com/iOSWhisperTest/whispertest-model-interface) (WhisperTest Model Interface), which:
+
+- Receives **accessibility (A11Y) data**, **OCR detections**, or **screenshots** from the iOS app under test.
+- Formats this data into structured prompts for an LLM (through a REST API endpoint).
+- Optionally performs a **consent-dialog classification** pass (accept/reject).
+- Returns a single **next action** (e.g. _Tap_, _Type_) that WhisperTest can execute on the device.
+
+```bash
+git clone https://github.com/iOSWhisperTest/whispertest-model-interface.git
+cd whispertest-model-interface
+pip install -r requirements.txt
+pip install -e .
+```
+
+The package expects an LLM REST server with endpoints like `http://<server-ip>:5000/query_ollama` or `http://<server-ip>:5000/query_transformers`. An example Flask-based REST API can be found [here](https://github.com/iOSWhisperTest/llm-rest-api).
+
+
 ## ⚙️ Configuration
 
 ### Configure the Framework
 
-Copy the example configuration and customize as needed. All keys are optional -- only override what you want to change:
-
-```bash
-cp config.json.example config.json
-```
-
-Example with commonly changed settings:
+Copy the example configuration and customize as needed:
 
 ```json
 {
+  "media_path": "media_output",
+  "tts_provider": "piper_en_US-amy-medium",
+  "tts_audio_root_dir": "vc_cmd_audio_files",
   "piper_root_dir": "~/piper",
   "consent_mode": "accept",
-  "omniparser_api_url": "http://0.0.0.0:5003/process"
+  "model_name": "qwen2.5:14b",
+  "timeout_app_navigation": 200,
+  "timeout_app_installation": 120,
+  "omniparser_api_url": "http://0.0.0.0:5003/process",
+  "processed_apps_path": "processed_appIDs.txt",
+  "failed_apps_path": "failed_appIDs.txt",
+  "rsd_address": "",
+  "rsd_port": ""
 }
 ```
 
-**All Configuration Options** (see `config.json.example` for the full template):
+**Configuration Options**:
 
 | Key | Default | Description |
 |---|---|---|
@@ -310,42 +351,6 @@ and USB mouse and keyboard emulation by connecting a Raspberry Pi to the iOS dev
 as described in sections 3.1.5 and 3.1.6 of our paper.
 This functionality is experimental and is currently not integrated with the rest of the repository.
 See `raspberry_pi/README.md` for more details.
-
-## 🔌 Integrations (Optional)
-
-WhisperTest can be extended with external services for OCR and LLM-based navigation. These are **not required** for the core functionality (screenshots, accessibility, voice commands).
-
-### OmniParser OCR Service
-
-WhisperTest integrates with a REST-based version of [OmniParser](https://github.com/zahra7394/OmniParser) — a FastAPI service that performs OCR and visual element detection on screenshots. The service can run locally or remotely and returns structured detection results and a labeled image.
-
-```bash
-git clone https://github.com/zahra7394/OmniParser.git
-cd OmniParser
-pip install -r requirements.txt
-python app.py
-```
-
-The API will start at http://localhost:5003/process.
-Set `omniparser_api_url` in `config.json` to connect WhisperTest to this endpoint.
-
-### LLM-based Navigation Service
-
-WhisperTest can use local or remote Large Language Models (LLMs) for navigation decisions via the companion package [`wtmi`](https://github.com/iOSWhisperTest/whispertest-model-interface) (WhisperTest Model Interface), which:
-
-- Receives **accessibility (A11Y) data**, **OCR detections**, or **screenshots** from the iOS app under test.
-- Formats this data into structured prompts for an LLM (through a REST API endpoint).
-- Optionally performs a **consent-dialog classification** pass (accept/reject).
-- Returns a single **next action** (e.g. _Tap_, _Type_) that WhisperTest can execute on the device.
-
-```bash
-git clone https://github.com/iOSWhisperTest/whispertest-model-interface.git
-cd whispertest-model-interface
-pip install -r requirements.txt
-pip install -e .
-```
-
-The package expects an LLM REST server with endpoints like `http://<server-ip>:5000/query_ollama` or `http://<server-ip>:5000/query_transformers`. An example Flask-based REST API can be found [here](https://github.com/iOSWhisperTest/llm-rest-api).
 
 ## 📊 Data Collection
 
