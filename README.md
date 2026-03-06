@@ -408,8 +408,8 @@ pip install pyobjc-framework-Cocoa
 
 **Problem**: Accessibility scan hangs or `move_focus_next` blocks indefinitely
 
-**Solution**: This is a known bug in pymobiledevice3 **7.7.0 – 7.8.x** where `move_focus_next()` blocks forever after the last focusable element (instead of wrapping around). Versions **≤ 7.6.0** and **≥ 8.0.0** are not affected. Check your version:
-If you're on an affected version, switch to the pinned safe version:
+**Solution**: This is a bug in pymobiledevice3 **7.7.0 – 7.8.x** where `move_focus_next()` blocks forever after the last focusable element (instead of wrapping around). Versions **≤ 7.6.0** and **≥ 8.0.0** are not affected.
+If you're on an affected version, install the pinned safe version:
 ```bash
 pip install pymobiledevice3==7.6.0
 ```
