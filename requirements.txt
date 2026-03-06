@@ -1,5 +1,5 @@
 # Core dependencies
-pymobiledevice3==4.16.3
+pymobiledevice3==7.6.0
 
 # Text-to-Speech
 gTTS
