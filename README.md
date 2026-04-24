@@ -8,28 +8,23 @@ WhisperTest uses Apple's [Voice Control](https://support.apple.com/en-us/111778)
 
 ## 🌟 Features
 
-**🗣️ Text-to-Speech + Voice Control**:
+- **Text-to-Speech + Voice Control**:
 Automates app and OS interaction using Apple's native Voice Control and spoken commands.
-
-**💻 Cross-platform**:
+- **Cross-platform**:
 Runs on macOS, Linux, and Windows.
-
-**🍏 Works on the latest iOS versions without requiring jailbreak**:
+- **Works on the latest iOS versions without requiring jailbreak**:
 Compatible with iOS 17 and above. Jailbreaking is not necessary.
-
-**📱 Testing of third-party apps and OS features**:
+- **Testing of third-party apps and OS features**:
 Enables automation of any iOS app without developer access or modifications. Also enables automating iOS system apps, menus and features.
-
-**🧩 Modular and extensible architecture**:
+- **Modular and extensible architecture**:
 Easily integrate new features or navigation strategies (i.e., how to interact with a given app).
+-**Comprehensive Data Collection**:
 
-**🔍 Comprehensive Data Collection**:
-
-- 🖼️ **Screenshots:** Captured at each interaction step
-- 🎥 **Screen recordings:** Full session video (MP4)
-- 🌐 **Network traffic:** PCAP files for traffic and tracker analysis
-- ♿ **Accessibility data:** UI tree dumps and element metadata
-- 🔤 **OCR output:** Extracted on-screen text and icons (via OmniParser)
+   - **Screenshots:** Captured at each interaction step
+   - **Screen recordings:** Full session video (MP4)
+   - **Network traffic:** PCAP files for traffic and tracker analysis
+   - **Accessibility data:** UI tree dumps and element metadata
+   - **OCR output:** Extracted on-screen text and icons (via OmniParser)
 
 ## 🎥 Demo
 
@@ -54,7 +49,7 @@ https://github.com/user-attachments/assets/7d0d6bf4-4f18-487a-8352-f10e818ae2e8
 3. **Trust Computer**:
 
    - Connect device via USB
-   - Tap "Trust" when prompted on device
+   - Tap "Trust" when prompted on the device
 
 ## 🚀 Installation
 
@@ -440,7 +435,7 @@ pip install pymobiledevice3==7.6.0
 
 ## 🤝 Contributing
 
-We welcome contributions! Whether it's bug fixes, new features, documentation improvements, your help is appreciated.
+We welcome contributions! Whether it's bug fixes, new features, or documentation improvements, your help is appreciated.
 
 ## 🙏 Acknowledgments
 
