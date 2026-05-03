@@ -247,7 +247,17 @@ class WhisperTestDevice():
                 # SoftwareBehavior
                 continue
             self.details[key] = value
-        self.details['AccessibilitySettings'] = self.a11y.get_ax_settings()
+        try:
+            self.details['AccessibilitySettings'] = self.a11y.get_ax_settings()
+        except pymobiledevice3.exceptions.ConnectionFailedError as e:
+            # AccessibilityAudit over the plain usbmux lockdown is rejected on
+            # iOS 18+ ({MessageType: Result, Number: 3}); the tunnel-backed
+            # service_provider acquired later in __init__ handles it. degrade
+            # gracefully here so init doesn't blow up.
+            logger.warning(
+                "⚠️ Could not fetch AccessibilityAudit settings "
+                "(iOS 18+ requires tunnel): %s", e)
+            self.details['AccessibilitySettings'] = {}
         if print_device_info:
             logger.info(f"Device info: {json.dumps(self.details, indent=4)}")
 
