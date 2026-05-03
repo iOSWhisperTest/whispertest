@@ -5,7 +5,9 @@ from typing import List, Tuple, Optional, Dict, Any
 try:
     from ad_template_matching.template_matching import perform_template_matching
 except ImportError:
-    print("❌ ad_template_matching not found.")
+    # optional dependency; only template-matching code paths need it
+    logging.getLogger(__name__).debug(
+        "ad_template_matching not installed; template matching disabled")
     perform_template_matching = None
 
 from whisper_test.common import TIMEOUT_FOR_APP_NAVIGATION

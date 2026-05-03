@@ -4,8 +4,13 @@ from whisper_test.common import logger
 try:
     from wtmi.interface import model_query_interface, model_query_classification
 except ImportError:
-    logger.error("❌ Error importing from wtmi.interface."
-        "Please make sure the wtmi package is installed if you need it.")
+    # optional dependency; only LLM-based navigation needs it. callers that
+    # invoke find_next_action_llm_based without wtmi will get a NameError —
+    # that's loud at the call site, which is where the real failure is.
+    logger.debug(
+        "wtmi.interface not installed; LLM-based navigation disabled")
+    model_query_interface = None
+    model_query_classification = None
 
 def find_next_action_llm_based(screen_text_list,
                                 app_id,
