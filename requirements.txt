@@ -4,6 +4,9 @@ pymobiledevice3==7.6.0
 # Text-to-Speech
 gTTS
 playsound==1.2.2
+# playsound 1.2.2 uses AppKit.NSSound on macOS; without this it silently
+# no-ops, piper renders audio but nothing is ever played out.
+pyobjc-framework-AppKit; sys_platform == "darwin"
 
 # OCR and Image Processing
 easyocr>=1.7.0
